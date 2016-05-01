@@ -30,7 +30,7 @@ class Listeners {
     String lbProtocol = HTTPS
     String sslCertificateId
 
-    def Listener toAwsListener() {
+    def Listener toListener() {
         new Listener()
             .withInstancePort(instancePort)
             .withInstanceProtocol(instanceProtocol)

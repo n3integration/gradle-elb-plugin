@@ -21,18 +21,21 @@ import com.amazonaws.services.elasticloadbalancing.model.Tag
 import com.google.common.collect.Lists
 
 class ElasticLoadBalancer {
+
     final String name
-    Boolean crossZoneLoadBalancing
+    Boolean crossZoneLoadBalancing  = Boolean.FALSE
     Integer idleTimeout
-    Boolean connectionDraining
+    Boolean connectionDraining      = Boolean.FALSE
     Integer connectionDrainingTimeout
 
     AccessLogs accessLogs
     HealthCheck healthCheck
 
     List<Tag> tags
+    List<String> subnets
     List<String> instances
     List<Listeners> listeners
+    List<String> securityGroups
     List<String> availabilityZones
 
     ElasticLoadBalancer(name) {

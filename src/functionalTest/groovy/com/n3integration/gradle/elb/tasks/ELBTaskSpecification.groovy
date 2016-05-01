@@ -28,31 +28,36 @@ class ELBTaskSpecification extends Specification {
     @Rule final TemporaryFolder testProjectDir = new TemporaryFolder()
 
     File buildFile
-
-    def setup() {
-        buildFile = testProjectDir.newFile('build.gradle')
-    }
-
-    @Unroll
-    def "can create a load balancer with Gradle version #gradleVersion"() {
-        given:
-        buildFile << """
+    String elbName = "some-function-elb"
+    String version = "0.1.0"
+    String header = """
         buildscript {
             repositories {
                 mavenLocal()
                 mavenCentral()
             }
             dependencies {
-                classpath "com.n3integration:gradle-elb-plugin:0.1.0"
+                classpath "com.n3integration:gradle-elb-plugin:${version}"
             }
         }
 
-        apply plugin: 'aws-elb'
+        apply plugin: "aws-elb"
+    """.stripMargin()
+
+    def setup() {
+        buildFile = testProjectDir.newFile("build.gradle")
+    }
+
+    @Unroll
+    def "can create a load balancer with Gradle version #gradleVersion"() {
+        given:
+        buildFile << """
+        ${header}
 
         elb {
             resources {
-                "some-function-elb" {
-                    availabilityZones = ["us-east-1a", "us-east-1c"]
+                "${elbName}" {
+                    availabilityZones = ["us-east-1b", "us-east-1c"]
 
                     crossZoneLoadBalancing = "true"
                     idleTimeout = 400
@@ -82,6 +87,12 @@ class ELBTaskSpecification extends Specification {
                         interval = 30
                     }
 
+                    accessLogs {
+                        bucket = "foo"
+                        bucketPrefix = "bar"
+                        interval = 60
+                    }
+
                     tag {
                         key = "function"
                         value = "node-cluster"
@@ -94,13 +105,40 @@ class ELBTaskSpecification extends Specification {
         def result = GradleRunner.create()
             .withGradleVersion(gradleVersion)
             .withProjectDir(testProjectDir.root)
-            .withArguments('createLoadBalancer')
+            .withArguments("createLoadBalancer")
             .build()
 
         then:
         result.task(":createLoadBalancer").outcome == TaskOutcome.SUCCESS
 
         where:
-        gradleVersion << ['2.13']
+        gradleVersion << ["2.13"]
+    }
+
+    @Unroll
+    def "can delete a load balancer with Gradle version #gradleVersion"() {
+        given:
+        buildFile << """
+        ${header}
+
+        elb {
+            resources {
+                "${elbName}" {
+                }
+            }
+        }""".stripMargin()
+
+        when:
+        def result = GradleRunner.create()
+            .withGradleVersion(gradleVersion)
+            .withProjectDir(testProjectDir.root)
+            .withArguments("deleteLoadBalancer")
+            .build()
+
+        then:
+        result.task(":deleteLoadBalancer").outcome == TaskOutcome.SUCCESS
+
+        where:
+        gradleVersion << ["2.13"]
     }
 }

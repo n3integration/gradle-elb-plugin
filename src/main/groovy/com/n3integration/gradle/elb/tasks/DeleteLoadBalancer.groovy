@@ -16,10 +16,12 @@
  */
 package com.n3integration.gradle.elb.tasks
 
+import com.n3integration.gradle.elb.ELBAware
+import com.n3integration.gradle.elb.ELBExtention
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
-class DeleteLoadBalancer extends DefaultTask {
+class DeleteLoadBalancer extends DefaultTask implements ELBAware {
 
     DeleteLoadBalancer() {
         this.description = "Deletes an existing Elastic Load Balancer"
@@ -27,6 +29,16 @@ class DeleteLoadBalancer extends DefaultTask {
 
     @TaskAction
     def deleteLoadBalancerAction() {
+        ELBExtention elbExtention = this.project.elb;
 
+        if(elbExtention != null) {
+            def client = createClient()
+
+            elbExtention.resources.each { resource ->
+                logger.quiet("Deleting ${resource.name} elastic load balancer...")
+                def result = deleteLoadBalancer(client, resource)
+                logger.quiet("deleted:\t${result}")
+            }
+        }
     }
 }
