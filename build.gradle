@@ -12,6 +12,8 @@ apply plugin: "idea"
 apply plugin: "maven-publish"
 apply plugin: "io.spring.dependency-management"
 
+apply from: "gradle/funcTest.gradle"
+
 repositories {
     jcenter()
 }
