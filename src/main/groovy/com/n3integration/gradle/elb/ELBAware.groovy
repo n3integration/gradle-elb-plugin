@@ -22,17 +22,42 @@ import com.amazonaws.services.elasticloadbalancing.AmazonElasticLoadBalancingCli
 import com.amazonaws.services.elasticloadbalancing.model.*
 import com.n3integration.gradle.elb.models.ElasticLoadBalancer
 
+/**
+ * Elastic load balancer aware trait to centralize access for ELB operations
+ *
+ * @author n3integration
+ */
 trait ELBAware {
 
+    /**
+     * Creates a new client
+     *
+     * @return a new {@link AmazonElasticLoadBalancingClient}
+     */
     def AmazonElasticLoadBalancingClient createClient() {
         new AmazonElasticLoadBalancingClient(defaultCredentials())
     }
 
+    /**
+     * Scans for AWS credentials using ~/.aws/credentials or environment
+     * variables
+     *
+     * @return initialized {@link AWSCredentials}
+     */
     def AWSCredentials defaultCredentials() {
         def credentialsProvider = new DefaultAWSCredentialsProviderChain()
         credentialsProvider.getCredentials()
     }
 
+    /**
+     * Creates an elastic load balancer
+     *
+     * @param client
+     *          the client
+     * @param elb
+     *          the {@link ElasticLoadBalancer}
+     * @return the result of the operation
+     */
     def CreateLoadBalancerResult createLoadBalancer(AmazonElasticLoadBalancingClient client, ElasticLoadBalancer elb) {
         client.createLoadBalancer(new CreateLoadBalancerRequest()
             .withLoadBalancerName(elb.name)
@@ -43,12 +68,31 @@ trait ELBAware {
             .withSubnets(elb.subnets))
     }
 
+    /**
+     * Configures the health check, if supplied, for the provided {@link ElasticLoadBalancer}
+     *
+     * @param client
+     *          the client
+     * @param elb
+     *          the {@link ElasticLoadBalancer}
+     * @return the result of the operation
+     */
     def ConfigureHealthCheckResult configureHealthCheck(AmazonElasticLoadBalancingClient client, ElasticLoadBalancer elb) {
         client.configureHealthCheck(new ConfigureHealthCheckRequest()
             .withLoadBalancerName(elb.name)
             .withHealthCheck(elb.healthCheck))
     }
 
+    /**
+     * Configures additional load balancer settings, if provided (including:
+     * access log bucket, connection draining, and timeout).
+     *
+     * @param client
+     *          the client
+     * @param elb
+     *          the {@link ElasticLoadBalancer}
+     * @return the result of the operation
+     */
     def ModifyLoadBalancerAttributesResult modifyAttributes(AmazonElasticLoadBalancingClient client, ElasticLoadBalancer elb) {
         client.modifyLoadBalancerAttributes(new ModifyLoadBalancerAttributesRequest()
             .withLoadBalancerName(elb.name)
@@ -63,6 +107,14 @@ trait ELBAware {
                     .withEnabled(elb.crossZoneLoadBalancing))))
     }
 
+    /**
+     * Replaces tags for the provided {@link ElasticLoadBalancer}
+     *
+     * @param client
+     *          the client
+     * @param elb
+     *          the {@link ElasticLoadBalancer}
+     */
     def modifyTags(AmazonElasticLoadBalancingClient client, ElasticLoadBalancer elb) {
         client.removeTags(new RemoveTagsRequest().withLoadBalancerNames(elb.name))
         if(elb.tags) {
@@ -72,6 +124,29 @@ trait ELBAware {
         }
     }
 
+    /**
+     * Describes a {@link List} of {@link ElasticLoadBalancer}s
+     *
+     * @param client
+     *          the client
+     * @param names
+     *          the list of load balancer names
+     * @return the result of the operation
+     */
+    def DescribeLoadBalancersResult describeLoadBalancers(AmazonElasticLoadBalancingClient client, List<String> names) {
+        client.describeLoadBalancers(new DescribeLoadBalancersRequest()
+            .withLoadBalancerNames(names))
+    }
+
+    /**
+     * Deletes an elastic load balancer with the provided name
+     *
+     * @param client
+     *          the client
+     * @param elb
+     *          the {@link ElasticLoadBalancer}
+     * @return the result of the operation
+     */
     def DeleteLoadBalancerResult deleteLoadBalancer(AmazonElasticLoadBalancingClient client, ElasticLoadBalancer elb) {
         client.deleteLoadBalancer(new DeleteLoadBalancerRequest()
             .withLoadBalancerName(elb.name))

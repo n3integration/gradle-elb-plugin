@@ -18,15 +18,20 @@ package com.n3integration.gradle.elb.models
 
 import com.amazonaws.services.elasticloadbalancing.model.Listener
 
+/**
+ *
+ * @author n3integration
+ */
 class Listeners {
 
     static final String HTTP    = "http"
     static final String HTTPS   = "https"
+    static final int WWW        = 80;
 
-    Integer instancePort = 80
+    Integer instancePort = WWW
     String instanceProtocol = HTTP
 
-    Integer lbPort = 80
+    Integer lbPort = WWW
     String lbProtocol = HTTPS
     String sslCertificateId
 

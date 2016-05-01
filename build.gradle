@@ -53,7 +53,7 @@ publishing {
 }
 
 group   = "com.n3integration"
-version = "0.1.0"
+version = "1.0.0"
 
 ext.compatibilityVersion = "1.7"
 sourceCompatibility = compatibilityVersion
@@ -61,7 +61,7 @@ targetCompatibility = compatibilityVersion
 
 jar {
     manifest {
-        attributes "Implementation-Title": "Gradle AWS plugin",
+        attributes "Implementation-Title": "Gradle ELB plugin",
                    "Implementation-Version": version,
                    "Built-By": "n3integration",
                    "Built-Date": new Date(),

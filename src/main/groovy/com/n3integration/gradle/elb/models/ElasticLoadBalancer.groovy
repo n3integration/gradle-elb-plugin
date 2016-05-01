@@ -20,6 +20,9 @@ import com.amazonaws.services.elasticloadbalancing.model.HealthCheck
 import com.amazonaws.services.elasticloadbalancing.model.Tag
 import com.google.common.collect.Lists
 
+/**
+ * @author n3integration
+ */
 class ElasticLoadBalancer {
 
     final String name
@@ -43,7 +46,7 @@ class ElasticLoadBalancer {
         this.tags = Lists.newArrayList()
         this.instances = Lists.newArrayList()
         this.listeners = Lists.newArrayList()
-        this.availabilityZones = Lists.newArrayList()
+        this.availabilityZones = Lists.newArrayList("us-east-1b", "us-east-1c")
     }
 
     void healthCheck(@DelegatesTo(HealthCheck) Closure closure) {

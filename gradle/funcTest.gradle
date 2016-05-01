@@ -1,5 +1,4 @@
 apply plugin: 'groovy'
-//apply plugin: 'java-gradle-plugin'
 
 sourceSets {
     functionalTest {
@@ -20,10 +19,6 @@ task functionalTest(type: Test) {
 }
 
 check.dependsOn functionalTest
-
-//gradlePlugin {
-//    testSourceSets sourceSets.functionalTest
-//}
 
 dependencies {
     functionalTestCompile('org.spockframework:spock-core:1.0-groovy-2.4') {

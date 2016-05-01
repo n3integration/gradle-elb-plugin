@@ -24,7 +24,7 @@ import org.gradle.api.tasks.TaskAction
 class DeleteLoadBalancer extends DefaultTask implements ELBAware {
 
     DeleteLoadBalancer() {
-        this.description = "Deletes an existing Elastic Load Balancer"
+        this.description = "Deletes an elastic load balancer"
     }
 
     @TaskAction
@@ -36,8 +36,8 @@ class DeleteLoadBalancer extends DefaultTask implements ELBAware {
 
             elbExtention.resources.each { resource ->
                 logger.quiet("Deleting ${resource.name} elastic load balancer...")
-                def result = deleteLoadBalancer(client, resource)
-                logger.quiet("deleted:\t${result}")
+                deleteLoadBalancer(client, resource)
+                logger.quiet("\tdeleted: ${resource.name}")
             }
         }
     }

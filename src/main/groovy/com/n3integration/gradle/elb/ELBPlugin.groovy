@@ -19,11 +19,16 @@ package com.n3integration.gradle.elb
 import com.n3integration.gradle.elb.models.ElasticLoadBalancer
 import com.n3integration.gradle.elb.tasks.CreateLoadBalancer
 import com.n3integration.gradle.elb.tasks.DeleteLoadBalancer
-
+import com.n3integration.gradle.elb.tasks.DescribeLoadBalancer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 
+/**
+ * Elastic load balancer gradle {@link Plugin}
+ *
+ * @author n3integration
+ */
 class ELBPlugin implements Plugin<Project> {
 
     public static final String ELB_EXTENSION = "elb"
@@ -34,8 +39,9 @@ class ELBPlugin implements Plugin<Project> {
     void apply(Project project) {
         def resources = project.container(ElasticLoadBalancer)
 
-        project.tasks.create("createLoadBalancer", CreateLoadBalancer)
-        project.tasks.create("deleteLoadBalancer", DeleteLoadBalancer)
+        project.tasks.create("createLoadBalancers", CreateLoadBalancer)
+        project.tasks.create("describeLoadBalancers", DescribeLoadBalancer)
+        project.tasks.create("deleteLoadBalancers", DeleteLoadBalancer)
 
         project.extensions.create(ELB_EXTENSION, ELBExtention, resources)
 

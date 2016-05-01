@@ -18,6 +18,9 @@ package com.n3integration.gradle.elb.models
 
 import com.amazonaws.services.elasticloadbalancing.model.AccessLog
 
+/**
+ * @author n3integration
+ */
 class AccessLogs {
     String bucket
     String bucketPrefix
@@ -25,6 +28,7 @@ class AccessLogs {
 
     def AccessLog toAccessLog() {
         new AccessLog()
+            .withEnabled(true)
             .withS3BucketName(bucket)
             .withS3BucketPrefix(bucketPrefix)
             .withEmitInterval(interval)

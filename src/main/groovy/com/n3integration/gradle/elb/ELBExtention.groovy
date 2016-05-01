@@ -19,6 +19,11 @@ package com.n3integration.gradle.elb
 import com.n3integration.gradle.elb.models.ElasticLoadBalancer
 import org.gradle.api.NamedDomainObjectContainer
 
+/**
+ * Custom extension for configuring elastic load balancers
+ *
+ * @author n3integration
+ */
 class ELBExtention {
 
     final NamedDomainObjectContainer<ElasticLoadBalancer> resources

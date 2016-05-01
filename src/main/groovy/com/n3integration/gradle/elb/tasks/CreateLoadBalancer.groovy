@@ -24,7 +24,7 @@ import org.gradle.api.tasks.TaskAction
 class CreateLoadBalancer extends DefaultTask implements ELBAware {
 
     CreateLoadBalancer() {
-        this.description = "Creates a new Elastic Load Balancer"
+        this.description = "Creates an elastic load balancer (ELB)"
     }
 
     @TaskAction
@@ -35,20 +35,20 @@ class CreateLoadBalancer extends DefaultTask implements ELBAware {
             def client = createClient()
 
             elbExtention.resources.each { resource ->
-                logger.quiet("Creating ${resource.name} elastic load balancer...")
+                logger.quiet("Creating '${resource.name}' elastic load balancer...")
                 def result = createLoadBalancer(client, resource)
-                logger.quiet("created:\t${result.DNSName}")
+                    logger.quiet("\t            created: ${result.DNSName}")
 
                 if(resource.healthCheck) {
                     result = configureHealthCheck(client, resource)
-                    logger.quiet("configured:\t${result.healthCheck}")
+                    logger.quiet("\t         configured: ${result.healthCheck}")
                 }
                 else {
                     logger.warn("no health check configured for ${resource.name}")
                 }
 
                 result = modifyAttributes(client, resource)
-                logger.quiet("modified attributes\t${result.loadBalancerAttributes}")
+                logger.quiet("\tmodified attributes: ${result.loadBalancerAttributes}")
             }
         }
     }
