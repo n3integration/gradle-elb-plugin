@@ -1,5 +1,5 @@
 # gradle-elb-plugin
-[ ![Codeship Status for n3integration/gradle-elb-plugin](https://codeship.com/projects/3e7d9780-f556-0133-8394-4261b5a2c26f/status?branch=master)](https://codeship.com/projects/150348)
+[ ![Codeship Status for n3integration/gradle-elb-plugin](https://codeship.com/projects/3e7d9780-f556-0133-8394-4261b5a2c26f/status?branch=master)](https://codeship.com/projects/150348)  [ ![Download](https://api.bintray.com/packages/n3integration/maven/gradle-elb-plugin/images/download.svg) ](https://bintray.com/n3integration/maven/gradle-elb-plugin/_latestVersion)
 
 This plugin for [Gradle](http://www.gradle.org) gives developers the ability to [setup](#create), [describe](#describe), and [teardown](#delete) [elastic load balancers](https://aws.amazon.com/elasticloadbalancing/).
 
