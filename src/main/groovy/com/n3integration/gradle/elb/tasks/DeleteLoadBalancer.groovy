@@ -21,6 +21,11 @@ import com.n3integration.gradle.elb.ELBExtention
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
+/**
+ * Gradle task to delete an existing elastic load balancer
+ *
+ * @author n3integration
+ */
 class DeleteLoadBalancer extends DefaultTask implements ELBAware {
 
     DeleteLoadBalancer() {

@@ -21,10 +21,15 @@ import com.n3integration.gradle.elb.ELBExtention
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
+/**
+ * Gradle task to create a new elastic load balancer
+ *
+ * @author n3integration
+ */
 class CreateLoadBalancer extends DefaultTask implements ELBAware {
 
     CreateLoadBalancer() {
-        this.description = "Creates an elastic load balancer (ELB)"
+        this.description = "Creates an elastic load balancer"
     }
 
     @TaskAction
@@ -37,7 +42,7 @@ class CreateLoadBalancer extends DefaultTask implements ELBAware {
             elbExtention.resources.each { resource ->
                 logger.quiet("Creating '${resource.name}' elastic load balancer...")
                 def result = createLoadBalancer(client, resource)
-                    logger.quiet("\t            created: ${result.DNSName}")
+                logger.quiet("\t            created: ${result.DNSName}")
 
                 if(resource.healthCheck) {
                     result = configureHealthCheck(client, resource)

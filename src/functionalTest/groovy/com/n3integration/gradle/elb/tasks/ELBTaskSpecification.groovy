@@ -23,6 +23,11 @@ import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 import spock.lang.Unroll
 
+/**
+ * Monolithic acceptance test
+ *
+ * @author n3integration
+ */
 class ELBTaskSpecification extends Specification {
 
     @Rule final TemporaryFolder testProjectDir = new TemporaryFolder()

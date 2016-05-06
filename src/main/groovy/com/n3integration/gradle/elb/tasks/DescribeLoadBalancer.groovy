@@ -21,6 +21,11 @@ import com.n3integration.gradle.elb.ELBExtention
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
+/**
+ * Gradle task to fetch the status of an existing load balancer
+ *
+ * @author n3integration
+ */
 class DescribeLoadBalancer extends DefaultTask implements ELBAware {
 
     DescribeLoadBalancer() {

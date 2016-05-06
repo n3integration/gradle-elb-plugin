@@ -19,6 +19,8 @@ package com.n3integration.gradle.elb.models
 import com.amazonaws.services.elasticloadbalancing.model.AccessLog
 
 /**
+ * {@link AccessLog} wrapper
+ *
  * @author n3integration
  */
 class AccessLogs {

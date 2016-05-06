@@ -21,14 +21,16 @@ import com.amazonaws.services.elasticloadbalancing.model.Tag
 import com.google.common.collect.Lists
 
 /**
+ * Models an AWS elastic load balancer
+ *
  * @author n3integration
  */
 class ElasticLoadBalancer {
 
     final String name
-    Boolean crossZoneLoadBalancing  = Boolean.FALSE
+    Boolean crossZoneLoadBalancing  = Boolean.TRUE
     Integer idleTimeout
-    Boolean connectionDraining      = Boolean.FALSE
+    Boolean connectionDraining      = Boolean.TRUE
     Integer connectionDrainingTimeout
 
     AccessLogs accessLogs
@@ -46,7 +48,7 @@ class ElasticLoadBalancer {
         this.tags = Lists.newArrayList()
         this.instances = Lists.newArrayList()
         this.listeners = Lists.newArrayList()
-        this.availabilityZones = Lists.newArrayList("us-east-1b", "us-east-1c")
+        this.availabilityZones = Lists.newArrayList("us-east-1a", "us-east-1c")
     }
 
     void healthCheck(@DelegatesTo(HealthCheck) Closure closure) {

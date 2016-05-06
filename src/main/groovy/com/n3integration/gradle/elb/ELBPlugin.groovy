@@ -25,7 +25,7 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 
 /**
- * Elastic load balancer gradle {@link Plugin}
+ * Elastic load balancer Gradle {@link Plugin}
  *
  * @author n3integration
  */
