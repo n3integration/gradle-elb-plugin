@@ -48,14 +48,6 @@ dependencies {
     }
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
-}
-
 group   = "com.n3integration"
 version = "1.0.0"
 
@@ -91,3 +83,7 @@ idea.project {
     }
 }
 
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier "sources"
+}
