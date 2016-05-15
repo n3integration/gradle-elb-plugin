@@ -3,6 +3,13 @@
 
 This plugin for [Gradle](http://www.gradle.org) gives developers the ability to [setup](#create), [describe](#describe), and [teardown](#delete) [elastic load balancers](https://aws.amazon.com/elasticloadbalancing/).
 
+- [Project Configuration](#project-configuration)
+- [Create an Elastic Load Balancer](#create-an-elastic-load-balancer)
+  - [Configuration](#configuration)
+- [Describe an Elastic Load Balancer](#describe-an-elastic-load-balancer)
+	- [Sample Output](#sample-output)
+- [Delete an Elastic Load Balancer](#delete-an-elastic-load-balancer)
+
 #### Project Configuration
 The following should be placed at the head of our `build.gradle` file to include the `gradle-elb-plugin` dependency into our Gradle project.
 ```gradle
@@ -21,7 +28,7 @@ apply plugin: "aws-elb"
 #### Create an Elastic Load Balancer
 An elastic load balancer must be defined within a `loadBalancer` block within a `CreateLoadBalancer` task.
 
-#### Configuration
+##### Configuration
 <dl>
 <dt>listener</dt>
 <dd>A listener describes a port forwarding rule on the load balancer. For SSL connections, a certificate registered with Amazon's <a href="https://aws.amazon.com/certificate-manager/">Certificate Manager</a> can be included in the listener's sslCertificateId.</dd>
