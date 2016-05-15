@@ -16,6 +16,8 @@
  */
 package com.n3integration.gradle.elb.tasks
 
+import com.amazonaws.services.elasticloadbalancing.AmazonElasticLoadBalancingClient
+import com.google.common.base.Strings
 import com.n3integration.gradle.elb.ELBAware
 import com.n3integration.gradle.elb.ELBExtention
 import org.gradle.api.DefaultTask
@@ -26,24 +28,36 @@ import org.gradle.api.tasks.TaskAction
  *
  * @author n3integration
  */
-class DeleteLoadBalancer extends DefaultTask implements ELBAware {
+class DeleteLoadBalancerTask extends DefaultTask implements ELBAware {
 
-    DeleteLoadBalancer() {
+    String loadBalancerName
+
+    DeleteLoadBalancerTask() {
         this.description = "Deletes an elastic load balancer"
     }
 
     @TaskAction
     def deleteLoadBalancerAction() {
-        ELBExtention elbExtention = this.project.elb;
+        def client = createClient()
 
-        if(elbExtention != null) {
-            def client = createClient()
+        if(Strings.isNullOrEmpty(loadBalancerName)) {
+            ELBExtention elbExtention = this.project.elb;
 
-            elbExtention.resources.each { resource ->
-                logger.quiet("Deleting ${resource.name} elastic load balancer...")
-                deleteLoadBalancer(client, resource)
-                logger.quiet("\tdeleted: ${resource.name}")
+            // check against global configuration
+            if(elbExtention != null) {
+                elbExtention.resources.each { resource ->
+                    delete(client, resource.name)
+                }
             }
         }
+        else {
+            delete(client, loadBalancerName)
+        }
+    }
+
+    def delete(AmazonElasticLoadBalancingClient client, String name) {
+        logger.quiet("Deleting ${name} elastic load balancer...")
+        deleteLoadBalancer(client, name)
+        logger.quiet("\tdeleted: ${name}")
     }
 }

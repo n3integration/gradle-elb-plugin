@@ -14,27 +14,27 @@
  *  limitations under the License.
  *
  */
-package com.n3integration.gradle.elb.models
 
-import com.amazonaws.regions.Regions
-import com.amazonaws.services.elasticloadbalancing.model.AccessLog
+package com.n3integration.gradle.elb
+
+import com.amazonaws.auth.AWSCredentials
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain
 
 /**
- * {@link AccessLog} wrapper
+ * Base support for Amazon Web Services
  *
  * @author n3integration
  */
-class AccessLogs {
-    String region = Regions.US_EAST_1.getName()
-    String bucket
-    String bucketPrefix = "logs"
-    Integer interval
+trait AwsAware {
 
-    def AccessLog toAccessLog() {
-        new AccessLog()
-            .withEnabled(true)
-            .withS3BucketName(bucket)
-            .withS3BucketPrefix(bucketPrefix)
-            .withEmitInterval(interval)
+    /**
+     * Scans for AWS credentials using ~/.aws/credentials or environment
+     * variables
+     *
+     * @return initialized {@link AWSCredentials}
+     */
+    def AWSCredentials defaultCredentials() {
+        def credentialsProvider = new DefaultAWSCredentialsProviderChain()
+        credentialsProvider.getCredentials()
     }
 }

@@ -34,7 +34,7 @@ class ELBTaskSpecification extends Specification {
 
     File buildFile
     String elbName = "some-function-elb"
-    String version = "0.1.0"
+    String version = "1.1.0"
     String gradleVersion = "2.13"
 
     def setup() {
@@ -42,7 +42,7 @@ class ELBTaskSpecification extends Specification {
     }
 
     @Unroll
-    def "can #action a load balancer with Gradle"() {
+    def "can #action an elastic load balancer"() {
         given:
         buildFile << """
         buildscript {
@@ -57,63 +57,71 @@ class ELBTaskSpecification extends Specification {
 
         apply plugin: "aws-elb"
 
-        elb {
-            resources {
-                "${elbName}" {
-                    availabilityZones = ["us-east-1b", "us-east-1c"]
+        task createLoadBalancer(type: CreateLoadBalancer) {
+            loadBalancer {
+                name = "${elbName}"
+                availabilityZones = ["us-east-1b", "us-east-1c"]
 
-                    crossZoneLoadBalancing = "true"
-                    idleTimeout = 400
-                    connectionDraining = "true "
-                    connectionDrainingTimeout = 500
+                crossZoneLoadBalancing = "true"
+                idleTimeout = 400
+                connectionDraining = "true "
+                connectionDrainingTimeout = 500
 
-                    listener {
-                        instancePort = 9000
-                        instanceProtocol = "http"
-                        lbPort = 80
-                        lbProtocol = "http"
-                    }
+                listener {
+                    instancePort = 9000
+                    instanceProtocol = "http"
+                    lbPort = 80
+                    lbProtocol = "http"
+                }
 
-                    listener {
-                        instancePort = 9000
-                        instanceProtocol = "http"
-                        lbPort = 443
-                        lbProtocol = "https"
-                        sslCertificateId = System.getenv("CERTIFICATE_ID")
-                    }
+                listener {
+                    instancePort = 9000
+                    instanceProtocol = "http"
+                    lbPort = 443
+                    lbProtocol = "https"
+                    sslCertificateId = System.getenv("CERTIFICATE_ID")
+                }
 
-                    healthCheck {
-                        healthyThreshold = 2
-                        unhealthyThreshold = 2
-                        timeout = 3
-                        target = "HTTP:3000/"
-                        interval = 30
-                    }
+                healthCheck {
+                    healthyThreshold = 2
+                    unhealthyThreshold = 2
+                    timeout = 3
+                    target = "HTTP:3000/"
+                    interval = 30
+                }
 
-                    accessLogs {
-                        bucket = System.getenv("BUCKET_NAME")
-                        bucketPrefix = "logs"
-                        interval = 60
-                    }
+                accessLogs {
+                    bucket = System.getenv("BUCKET_NAME")
+                    bucketPrefix = "logs"
+                    interval = 60
+                }
 
-                    tag {
-                        key = "function"
-                        value = "node-cluster"
-                    }
+                tag {
+                    key = "function"
+                    value = "node-cluster"
                 }
             }
-        }""".stripMargin()
+        }
+
+        task describeLoadBalancer(type: DescribeLoadBalancer) {
+            loadBalancerName = "${elbName}"
+        }
+
+        task deleteLoadBalancer(type: DeleteLoadBalancer) {
+           loadBalancerName = "${elbName}"
+        }
+        """.stripMargin()
 
         when:
         def result = GradleRunner.create()
             .withGradleVersion(gradleVersion)
             .withProjectDir(testProjectDir.root)
-            .withArguments("${action}LoadBalancers")
+            .withArguments("${action}LoadBalancer")
             .build()
 
         then:
         println result.output
-        def task = result.task(":${action}LoadBalancers")
+        def task = result.task(":${action}LoadBalancer")
         task.outcome == TaskOutcome.SUCCESS
 
         where:

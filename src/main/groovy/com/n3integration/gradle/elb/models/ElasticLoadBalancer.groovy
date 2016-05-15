@@ -27,7 +27,7 @@ import com.google.common.collect.Lists
  */
 class ElasticLoadBalancer {
 
-    final String name
+    String name
     Boolean crossZoneLoadBalancing  = Boolean.TRUE
     Integer idleTimeout
     Boolean connectionDraining      = Boolean.TRUE
@@ -42,6 +42,10 @@ class ElasticLoadBalancer {
     List<Listeners> listeners
     List<String> securityGroups
     List<String> availabilityZones
+
+    ElasticLoadBalancer() {
+        this("default")
+    }
 
     ElasticLoadBalancer(name) {
         this.name = name

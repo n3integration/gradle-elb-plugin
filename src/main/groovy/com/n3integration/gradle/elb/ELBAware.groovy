@@ -16,18 +16,15 @@
  */
 package com.n3integration.gradle.elb
 
-import com.amazonaws.auth.AWSCredentials
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain
 import com.amazonaws.services.elasticloadbalancing.AmazonElasticLoadBalancingClient
 import com.amazonaws.services.elasticloadbalancing.model.*
 import com.n3integration.gradle.elb.models.ElasticLoadBalancer
-
 /**
  * Elastic load balancer aware trait to centralize access for ELB operations
  *
  * @author n3integration
  */
-trait ELBAware {
+trait ELBAware extends AwsAware {
 
     /**
      * Creates a new client
@@ -36,17 +33,6 @@ trait ELBAware {
      */
     def AmazonElasticLoadBalancingClient createClient() {
         new AmazonElasticLoadBalancingClient(defaultCredentials())
-    }
-
-    /**
-     * Scans for AWS credentials using ~/.aws/credentials or environment
-     * variables
-     *
-     * @return initialized {@link AWSCredentials}
-     */
-    def AWSCredentials defaultCredentials() {
-        def credentialsProvider = new DefaultAWSCredentialsProviderChain()
-        credentialsProvider.getCredentials()
     }
 
     /**
@@ -143,12 +129,12 @@ trait ELBAware {
      *
      * @param client
      *          the client
-     * @param elb
-     *          the {@link ElasticLoadBalancer}
+     * @param name
+     *          the {@link ElasticLoadBalancer} name
      * @return the result of the operation
      */
-    def DeleteLoadBalancerResult deleteLoadBalancer(AmazonElasticLoadBalancingClient client, ElasticLoadBalancer elb) {
+    def DeleteLoadBalancerResult deleteLoadBalancer(AmazonElasticLoadBalancingClient client, String name) {
         client.deleteLoadBalancer(new DeleteLoadBalancerRequest()
-            .withLoadBalancerName(elb.name))
+            .withLoadBalancerName(name))
     }
 }
